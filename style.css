@@ -326,7 +326,7 @@ body {
 .hero-visual {
   width: 100%;
   max-width: 760px;
-  margin: 16px 0 32px 0;
+  margin: 28px 0 44px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -397,12 +397,14 @@ body {
 
 @media (max-width: 768px) {
   .hero-visual {
-    margin: 10px 0 28px 0;
+    margin: 20px 0 40px 0;
+    width: 100%;
+    overflow: visible;
   }
   .hero-main-img {
     width: 100%;
     max-width: 100%;
-    transform: scale(1.08);
+    transform: scale(1.22);
   }
   .floating-bg-decor {
     opacity: 0.35;
@@ -772,7 +774,7 @@ section {
   justify-content: center;
   align-items: center;
   background: transparent;
-  border-radius: 16px;
+  border-radius: 20px;
 }
 
 .whatsapp-testimonial-img {
@@ -780,7 +782,7 @@ section {
   max-height: 560px;
   object-fit: contain;
   display: block;
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   transition: transform 0.3s ease;
 }
@@ -798,8 +800,8 @@ section {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(20, 20, 20, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text-white);
   font-size: 1.8rem;
   line-height: 1;
@@ -808,14 +810,13 @@ section {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
 }
 
 .carousel-btn:hover {
-  background: var(--action-red);
-  border-color: var(--action-red);
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 0 15px var(--action-red-glow);
+  background: rgba(0, 0, 0, 0.65);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.08);
 }
 
 .prev-btn { left: -22px; }
@@ -936,6 +937,7 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   color: var(--text-muted);
 }
 
@@ -944,9 +946,35 @@ section {
   color: #666666;
 }
 
+.strikethrough-red {
+  color: #FF4D4D !important;
+  text-decoration: line-through !important;
+  font-weight: 600;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.text-green-accent {
+  color: #10B981 !important;
+  font-weight: 800;
+}
+
 .free-val {
   color: var(--success-green);
   font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .receipt-box {
+    padding: 24px 14px;
+  }
+  .receipt-items {
+    font-size: 0.84rem;
+    gap: 12px;
+  }
+  .strikethrough-red {
+    font-size: 0.84rem;
+  }
 }
 
 .receipt-divider {
