@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/ativacao", "destination": "/manual_ativacao.html" },
+    { "source": "/ativação", "destination": "/manual_ativacao.html" }
+  ]
+}

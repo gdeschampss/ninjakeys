@@ -10,7 +10,7 @@
   <meta name="keywords" content="Ninja Keys, IA Pro, licença IA Pro, chave de ativação IA Pro, Gemini Pro, Deep Research, Veo, Antigravity">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="logo1.png">
+  <link rel="icon" type="image/webp" href="logo1.webp">
   
   <!-- Typography (Inter & Space Grotesk) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,8 +25,9 @@
   <div class="urgency-bar" id="urgencyBar">
     <div class="urgency-content">
       <span class="urgency-dot"></span>
-      <span class="urgency-text">⚡ OFERTA DE LOTE LIMITADO: Desconto de até 93% válido hoje</span>
-      <span class="urgency-timer-box">Expira em: <strong id="timer">14:59</strong></span>
+      <span class="urgency-text desktop-only">⚡ OFERTA DE LOTE LIMITADO: Desconto de até 93% válido hoje</span>
+      <span class="urgency-text mobile-only">⚡ Oferta acaba em:</span>
+      <span class="urgency-timer-box"><span class="desktop-only">Expira em: </span><strong id="timer">14:59</strong></span>
     </div>
   </div>
 
@@ -44,6 +45,15 @@
         <span class="text-highlight">por até 93% menos</span>
       </h1>
       
+      <!-- HERO VISUAL IMAGE DISPLAY -->
+      <div class="hero-visual">
+        <img src="img/heroSection IMG.webp" alt="Ninja Keys AI Pro - Licença Oficial e Recursos" class="hero-main-img">
+      </div>
+
+      <div class="hero-brand-logo-wrapper">
+        <img src="img/GoogleAiPrologo.webp" alt="Google AI Pro Logo" class="hero-brand-logo">
+      </div>
+
       <p class="hero-subheadline">
         Ninja Keys entrega chaves de ativação originais de <strong>IA PRO</strong> direto no seu e-mail em até 5 minutos. Sem mensalidade, sem pegadinha, sem burocracia.
       </p>
@@ -56,28 +66,6 @@
           <span>✅ Entrega em até 5 min</span>
           <span>✅ Chave original</span>
           <span>✅ Suporte via WhatsApp</span>
-        </div>
-      </div>
-
-      <!-- TERMINAL INTERATIVO (NINJA ACTIVATOR MOCKUP) -->
-      <div class="hero-visual">
-        <div class="terminal-card">
-          <div class="terminal-header">
-            <div class="terminal-dots">
-              <span class="dot red"></span>
-              <span class="dot yellow"></span>
-              <span class="dot green"></span>
-            </div>
-            <div class="terminal-title">NINJA_KEYS_ACTIVATOR_v2.4.exe</div>
-            <div class="terminal-badge">LIVE_SERVER</div>
-          </div>
-          <div class="terminal-body" id="terminalBody">
-            <div class="terminal-line"><span class="t-green">[SYS_INIT]</span> Connecting to official license distribution node...</div>
-            <div class="terminal-line"><span class="t-blue">[AUTH_OK]</span> License Token: <span class="t-highlight">NK-PRO-9842-ACTIVE</span></div>
-            <div class="terminal-line"><span class="t-yellow">[DISCOUNT]</span> Applied 93% OFF batch pricing — R$ 6,66/mo equivalence</div>
-            <div class="terminal-line"><span class="t-green">[STATUS]</span> Ready to deliver key to email in &lt; 5 minutes</div>
-            <div class="terminal-line cursor-line"><span class="t-prompt">ninja@keys:~$&nbsp;</span><span class="typing-text" id="typingText"></span><span class="blinking-cursor">_</span></div>
-          </div>
         </div>
       </div>
 
@@ -174,7 +162,8 @@
     </section>
 
     <!-- SEÇÃO NOVO DETALHAMENTO DE RECURSOS GOOGLE AI PRO -->
-    <section class="pro-features-stack-section">
+    <section class="pro-features-stack-section decorative-bg-section">
+      <img src="img/gemini3D.webp" alt="" class="floating-bg-decor bg-decor-right" aria-hidden="true">
       <div class="container">
         <div class="stack-badge text-center">⚡ PACOTE COMPLETO DE RECURSOS INCLUSOS</div>
         <h2 class="section-title text-center">Tudo o que você ganha com o Acesso IA Pro</h2>
@@ -266,55 +255,113 @@
       </div>
     </section>
 
-    <!-- SEÇÃO 4 — DEPOIMENTOS -->
+    <!-- SEÇÃO 4 — DEPOIMENTOS WHATSAPP -->
     <section class="testimonials-section">
       <div class="container">
-        <h2 class="section-title text-center">Quem já ativou, recomenda</h2>
+        <div class="whatsapp-badge-wrapper text-center">
+          <span class="whatsapp-badge">💬 FEEDBACK DIRETO DO WHATSAPP</span>
+        </div>
+        <h2 class="section-title text-center">Depoimentos Reais de Clientes</h2>
+        <p class="section-subtitle text-center">Confira abaixo as conversas e feedbacks reais dos nossos clientes diretamente no nosso atendimento do WhatsApp.</p>
+        
         <div class="rating-summary text-center">
           <span class="stars">⭐⭐⭐⭐⭐</span>
-          <span class="rating-score">4.9 / 5.0</span>
-          <span class="rating-count">(Mais de 2.400 chaves ativadas este mês)</span>
+          <span class="rating-score">5.0 / 5.0</span>
+          <span class="rating-count">(Mais de 2.400 clientes atendidos e satisfeitos no WhatsApp)</span>
         </div>
 
-        <div class="testimonials-grid">
-          
-          <div class="testimonial-card">
-            <div class="t-stars">⭐⭐⭐⭐⭐</div>
-            <p class="t-quote">"Achei que era cilada pelo preço tão baixo, mas paguei o Pix e em 3 minutos o e-mail chegou. Ativou de primeira na minha conta oficial. Economizei mais de R$ 1.600!"</p>
-            <div class="t-author">
-              <div class="t-avatar">LM</div>
-              <div class="t-info">
-                <strong>Lucas M.</strong>
-                <span>São Paulo / SP · Ativou 18 Meses</span>
+        <!-- CARROSSEL DE DEPOIMENTOS WHATSAPP -->
+        <div class="testimonials-carousel-wrapper">
+          <button class="carousel-btn prev-btn" id="carouselPrev" aria-label="Depoimento anterior">‹</button>
+
+          <div class="testimonials-carousel" id="testimonialsCarousel">
+            
+            <div class="testimonial-slide active">
+              <div class="whatsapp-card">
+                <div class="whatsapp-card-header">
+                  <span class="wa-status-dot"></span>
+                  <span class="wa-header-title">Conversa Verificada · WhatsApp Ninja Keys</span>
+                  <span class="wa-verified-tag">✓ Cliente Verificado</span>
+                </div>
+                <div class="whatsapp-img-container">
+                  <img src="depoimentos/WhatsApp_chat_dark_mode_replica_202608052323.jpeg" alt="Depoimento WhatsApp Cliente Ninja Keys 1" class="whatsapp-testimonial-img">
+                  <div class="zoom-overlay">
+                    <span>🔍 Clique para ampliar</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="testimonial-card">
-            <div class="t-stars">⭐⭐⭐⭐⭐</div>
-            <p class="t-quote">"Uso o Gemini Pro e o NotebookLM diariamente no meu trabalho e faculdade. O 5TB de nuvem e o YouTube sem anúncios foram bônus insanos. Paguei R$ 119 uma vez só."</p>
-            <div class="t-author">
-              <div class="t-avatar">CR</div>
-              <div class="t-info">
-                <strong>Camila R.</strong>
-                <span>Curitiba / PR · Ativou 18 Meses</span>
+            <div class="testimonial-slide">
+              <div class="whatsapp-card">
+                <div class="whatsapp-card-header">
+                  <span class="wa-status-dot"></span>
+                  <span class="wa-header-title">Conversa Verificada · WhatsApp Ninja Keys</span>
+                  <span class="wa-verified-tag">✓ Cliente Verificado</span>
+                </div>
+                <div class="whatsapp-img-container">
+                  <img src="depoimentos/WhatsApp_chat_dark_mode_replica_202608052323_2.jpeg" alt="Depoimento WhatsApp Cliente Ninja Keys 2" class="whatsapp-testimonial-img">
+                  <div class="zoom-overlay">
+                    <span>🔍 Clique para ampliar</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="testimonial-card">
-            <div class="t-stars">⭐⭐⭐⭐⭐</div>
-            <p class="t-quote">"Sou desenvolvedor e uso muito o Google Antigravity e Jules pra código. O suporte no WhatsApp tirou minha dúvida na hora. Licença original perfeita."</p>
-            <div class="t-author">
-              <div class="t-avatar">RT</div>
-              <div class="t-info">
-                <strong>Rafael T.</strong>
-                <span>Belo Horizonte / MG · Ativou 12 Meses</span>
+            <div class="testimonial-slide">
+              <div class="whatsapp-card">
+                <div class="whatsapp-card-header">
+                  <span class="wa-status-dot"></span>
+                  <span class="wa-header-title">Conversa Verificada · WhatsApp Ninja Keys</span>
+                  <span class="wa-verified-tag">✓ Cliente Verificado</span>
+                </div>
+                <div class="whatsapp-img-container">
+                  <img src="depoimentos/WhatsApp_chat_dark_mode_replica_202608052323_3.jpeg" alt="Depoimento WhatsApp Cliente Ninja Keys 3" class="whatsapp-testimonial-img">
+                  <div class="zoom-overlay">
+                    <span>🔍 Clique para ampliar</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <div class="testimonial-slide">
+              <div class="whatsapp-card">
+                <div class="whatsapp-card-header">
+                  <span class="wa-status-dot"></span>
+                  <span class="wa-header-title">Conversa Verificada · WhatsApp Ninja Keys</span>
+                  <span class="wa-verified-tag">✓ Cliente Verificado</span>
+                </div>
+                <div class="whatsapp-img-container">
+                  <img src="depoimentos/WhatsApp_chat_dark_mode_replica_202608052323_4.jpeg" alt="Depoimento WhatsApp Cliente Ninja Keys 4" class="whatsapp-testimonial-img">
+                  <div class="zoom-overlay">
+                    <span>🔍 Clique para ampliar</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-slide">
+              <div class="whatsapp-card">
+                <div class="whatsapp-card-header">
+                  <span class="wa-status-dot"></span>
+                  <span class="wa-header-title">Conversa Verificada · WhatsApp Ninja Keys</span>
+                  <span class="wa-verified-tag">✓ Cliente Verificado</span>
+                </div>
+                <div class="whatsapp-img-container">
+                  <img src="depoimentos/Change_number_39_to_47_202608052323.jpeg" alt="Depoimento WhatsApp Cliente Ninja Keys 5" class="whatsapp-testimonial-img">
+                  <div class="zoom-overlay">
+                    <span>🔍 Clique para ampliar</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
+          <button class="carousel-btn next-btn" id="carouselNext" aria-label="Próximo depoimento">›</button>
         </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
       </div>
     </section>
 
@@ -369,7 +416,8 @@
     </section>
 
     <!-- SEÇÃO 6 — PLANOS (O CORAÇÃO DA CONVERSÃO) -->
-    <section class="plans-section" id="planos">
+    <section class="plans-section decorative-bg-section" id="planos">
+      <img src="img/Antigravity3D.webp" alt="" class="floating-bg-decor bg-decor-left" aria-hidden="true">
       <div class="container">
         <h2 class="section-title text-center">Escolha sua Ninja Key</h2>
         <p class="section-subtitle text-center">Pagamento único. Sem renovação automática. Acesso instantâneo.</p>
@@ -396,15 +444,13 @@
             </div>
 
             <ul class="plan-benefits">
-              <li><span class="check">✅</span> <strong>18 meses inteiros</strong> de acesso IA Pro completo</li>
-              <li><span class="check">✅</span> <strong>Menor custo por mês</strong> de todo o mercado (R$ 6,66)</li>
+              <li><span class="check">✅</span> <strong>18 meses</strong> de acesso completo</li>
+              <li><span class="check">✅</span> <strong>Menor custo por mês</strong> (R$ 6,66)</li>
               <li><span class="check">✅</span> Gemini Pro + Deep Research + Gens Personalizados</li>
               <li><span class="check">✅</span> Google Veo/Flow + Edição de Fotos Avançada</li>
               <li><span class="check">✅</span> Workspace IA + NotebookLM Pro + Antigravity/Jules</li>
-              <li><span class="check">✅</span> <strong>5 TB de Nuvem</strong> + YouTube Premium Lite</li>
-              <li><span class="check">✅</span> Manual de ativação instantânea (2 min)</li>
-              <li><span class="check">✅</span> Suporte prioritário VIP no WhatsApp</li>
-              <li><span class="check">✅</span> 7 dias de garantia incondicional</li>
+              <li><span class="check">✅</span> <strong>5 TB de Nuvem</strong></li>
+              <li><span class="check">✅</span> <strong>YouTube Premium Lite</strong></li>
             </ul>
 
             <div class="plan-footer">
@@ -437,14 +483,13 @@
             </div>
 
             <ul class="plan-benefits">
-              <li><span class="check">✅</span> <strong>12 meses</strong> de acesso IA Pro completo</li>
-              <li><span class="check">⚠️</span> R$ 7,58/mês <em>(+R$ 0,92/mês que o plano 18m)</em></li>
+              <li><span class="check">✅</span> <strong>12 meses</strong> de acesso completo</li>
+              <li><span class="check">⚠️</span> R$ 7,58/mês (+R$ 0,92/mês vs 18m)</li>
               <li><span class="check">✅</span> Gemini Pro + Deep Research + Gens</li>
-              <li><span class="check">✅</span> Google Veo/Flow + Workspace IA + NotebookLM</li>
-              <li><span class="check">✅</span> 5 TB de Nuvem + YouTube Premium Lite</li>
-              <li><span class="check">✅</span> Manual de ativação passo a passo</li>
-              <li><span class="check">✅</span> Suporte via WhatsApp</li>
-              <li><span class="check">✅</span> 7 dias de garantia incondicional</li>
+              <li><span class="check">✅</span> Google Veo/Flow + Edição de Fotos Avançada</li>
+              <li><span class="check">✅</span> Workspace IA + NotebookLM Pro + Antigravity/Jules</li>
+              <li><span class="check">✅</span> <strong>5 TB de Nuvem</strong></li>
+              <li><span class="check">✅</span> <strong>YouTube Premium Lite</strong></li>
             </ul>
 
             <div class="plan-footer">
@@ -595,6 +640,12 @@
         Quero essa →
       </button>
     </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL FOR TESTIMONIAL IMAGES -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <img class="lightbox-content" id="lightboxImg" alt="Depoimento Ampliado">
   </div>
 
   <script src="script.js"></script>

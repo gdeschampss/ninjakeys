@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Ativação - Ninja Keys</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+        
+        :root {
+            --bg-dark: #000000;
+            --bg-card: #111111;
+            --primary-neon: #00FF7F;
+            --text-main: #f0f2f5;
+            --text-muted: #a1a1aa;
+            --accent-red: #ff3366;
+            --border-color: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .alert-box {
+            background-color: rgba(255, 51, 102, 0.1);
+            border-left: 4px solid var(--accent-red);
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .alert-box h3 {
+            color: var(--accent-red);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .plan-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .plan-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .plan-badge {
+            background-color: rgba(0, 255, 127, 0.15);
+            color: var(--primary-neon);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 127, 0.3);
+            text-align: center;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: my-awesome-counter;
+        }
+
+        .step-item {
+            position: relative;
+            padding-left: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-item::before {
+            counter-increment: my-awesome-counter;
+            content: counter(my-awesome-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 36px;
+            height: 36px;
+            background-color: #18181b;
+            color: var(--primary-neon);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .step-item h4 {
+            color: #fff;
+            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
+        }
+
+        .step-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: #fff;
+            font-weight: 600;
+            text-decoration: underline;
+            text-decoration-color: var(--primary-neon);
+        }
+        
+        .link-box {
+            display: inline-block;
+            background-color: #09090b;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            color: var(--primary-neon);
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin-top: 0.8rem;
+            border: 1px dashed var(--border-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--bg-card);
+            padding: 1.5rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-neon);
+        }
+
+        .feature-card h5 {
+            color: #fff;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .plan-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .step-item {
+                padding-left: 3rem;
+            }
+            .step-item::before {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 1rem;">
+            <img src="img/logo1.webp" alt="Ninja Keys Logo" style="width: 115px; height: 115px; object-fit: contain; margin-bottom: 15px;">
+            <div class="logo" style="margin-bottom: 0;">NINJA KEYS</div>
+        </div>
+        <div class="subtitle">Manual Oficial de Ativação - Google AI Pro</div>
+    </header>
+
+    <div class="alert-box">
+        <h3>⚠️ ATENÇÃO ANTES DE COMEÇAR</h3>
+        <p>Verifique qual pacote você adquiriu (<strong>12 Meses</strong> ou <strong>18 Meses</strong>) e siga APENAS as instruções correspondentes ao seu plano abaixo. O método de ativação é diferente para cada um.</p>
+    </div>
+
+    <!-- 12 MONTHS PLAN -->
+    <section class="plan-section">
+        <div class="plan-header">
+            <h2 class="plan-title">Plano 12 Meses</h2>
+            <span class="plan-badge">Ativação por Link<br><small>(Convite VIP)</small></span>
+        </div>
+        
+        <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+            No plano de 12 meses, você entra para o grupo corporativo via convite. É o método mais rápido:
+        </p>
+
+        <ol class="step-list">
+            <li class="step-item">
+                <h4>Acesse o Link Recebido</h4>
+                <p>Após a compra, você recebeu um <span class="highlight">Link de Convite (Invitation Link)</span>. Copie e cole esse link no seu navegador ou clique nele diretamente.</p>
+            </li>
+            <li class="step-item">
+                <h4>Verifique o Login</h4>
+                <p>Certifique-se de estar logado na conta Google exata que você deseja transformar em Premium (aquela que você já usa no Gmail e Drive).</p>
+            </li>
+            <li class="step-item">
+                <h4>Aceite o Convite</h4>
+                <p>A página perguntará se você deseja entrar no grupo Premium (Google One/AI). Clique em aceitar e prosseguir.</p>
+            </li>
+            <li class="step-item">
+                <h4>Tudo Pronto! 🚀</h4>
+                <p>O Gemini Advanced, a Nuvem e todos os recursos Pro já estão vinculados à sua conta imediatamente. Feche a tela e comece a usar!</p>
+            </li>
+        </ol>
+    </section>
+
+    <!-- 18 MONTHS PLAN -->
+    <section class="plan-section">
+        <div class="plan-header">
+            <h2 class="plan-title">Plano 18 Meses</h2>
+            <span class="plan-badge" style="background-color: rgba(255, 51, 102, 0.15); color: var(--accent-red); border-color: rgba(255, 51, 102, 0.3);">Ativação por Chave<br><small>(Código PIN)</small></span>
+        </div>
+        
+        <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+            No plano de 18 meses, você ativa uma Licença/Chave de resgate diretamente na sua central do Google.
+        </p>
+
+        <ol class="step-list">
+            <li class="step-item">
+                <h4>Prepare o Dispositivo (MUITO IMPORTANTE)</h4>
+                <p>Para evitar erros de conflito, certifique-se de usar apenas <span class="highlight">UMA conta Google</span> no seu celular ou navegador. Se houver outras contas logadas juntas, saia delas temporariamente.</p>
+            </li>
+            <li class="step-item">
+                <h4>Acesse a Central de Resgate</h4>
+                <p>Abra o navegador e acesse a página oficial de resgate do Google:<br>
+                <a href="https://play.google.com/redeem" target="_blank" style="text-decoration: none;">
+                    <span class="link-box" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+                        play.google.com/redeem
+                    </span>
+                </a>
+                <br>
+                <small style="color: var(--text-muted); display: block; margin-top: 8px; line-height: 1.4;">(Ou abra o aplicativo <strong>Google Play Store</strong> ou <strong>Google One</strong> no seu celular, vá no seu Perfil e clique em "Resgatar Código")</small></p>
+            </li>
+            <li class="step-item">
+                <h4>Insira a sua Ninja Key</h4>
+                <p>Digite ou cole o código/chave que você recebeu no e-mail após a compra e clique para resgatar.</p>
+            </li>
+            <li class="step-item">
+                <h4>Confirme a Ativação 🚀</h4>
+                <p>Você verá a tela de confirmação de que o plano Premium foi adicionado à sua conta. É só confirmar e aproveitar.</p>
+            </li>
+        </ol>
+    </section>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <h3 style="color: #fff; margin-bottom: 1rem;">O que você acabou de desbloquear:</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; padding: 0 1rem;">
+            O <strong>Google AI (Gemini Advanced)</strong> integra a inteligência artificial mais poderosa do mercado diretamente no seu fluxo de trabalho. Seus e-mails, documentos e fotos agora estão elevados ao nível Pro.
+        </p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" alt="Gemini" style="width: 36px; height: 36px; margin-bottom: 10px;">
+                <h5>Gemini Advanced</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Acesso ao modelo Pro e Deep Research com limites 4x maiores.</p>
+            </div>
+            <div class="feature-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg" alt="Drive" style="width: 36px; height: 36px; margin-bottom: 10px;">
+                <h5>5TB de Nuvem</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Espaço total compartilhado entre Google Drive, Fotos e Gmail.</p>
+            </div>
+            <div class="feature-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube" style="width: 48px; height: 36px; object-fit: contain; margin-bottom: 10px;">
+                <h5>YouTube Premium Lite</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Assista seus vídeos sem anúncios no plano individual.</p>
+            </div>
+            <div class="feature-card">
+                <img src="manual_ativacaoImagens/workspace.webp" alt="Workspace" style="width: 36px; height: 36px; object-fit: contain; margin-bottom: 10px;">
+                <h5>Integração Workspace</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">A IA do Gemini direto no seu Gmail, Docs, Vids e outros apps.</p>
+            </div>
+            <div class="feature-card">
+                <img src="manual_ativacaoImagens/googleFlow.webp" alt="Google Flow" style="width: 36px; height: 36px; object-fit: contain; margin-bottom: 10px;">
+                <h5>Google Flow</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Acesso expandido a todos os modelos criativos de IA do Google.</p>
+            </div>
+            <div class="feature-card">
+                <img src="manual_ativacaoImagens/notebookLM.webp" alt="NotebookLM" style="width: 36px; height: 36px; object-fit: contain; margin-bottom: 10px;">
+                <h5>NotebookLM</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Acesso expandido ao seu assistente de pesquisa e resumos.</p>
+            </div>
+            <div class="feature-card">
+                <img src="manual_ativacaoImagens/antigravity.webp" alt="Antigravity" style="width: 36px; height: 36px; object-fit: contain; margin-bottom: 10px;">
+                <h5>Antigravity & Jules</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Integração com ecossistemas de agentes autônomos e devs.</p>
+            </div>
+            <div class="feature-card">
+                <img src="manual_ativacaoImagens/heat.webp" alt="Google Health" style="width: 36px; height: 36px; object-fit: contain; margin-bottom: 10px;">
+                <h5>Google Health Premium</h5>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">Mais benefícios de saúde e bem-estar do ecossistema Google.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Ainda precisa de ajuda? Caso tenha seguido os passos e encontrado algum erro, responda ao e-mail de compra.<br><br>
+        <strong>Equipe Ninja Keys &copy; 2024</strong></p>
+    </footer>
+</div>
+
+</body>
+</html>
