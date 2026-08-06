@@ -4,6 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initUrgencyTimer();
+  initSmartUrgencyBar();
   initFAQAccordion();
   initStickyMobileBar();
   initTestimonialsCarousel();
@@ -264,4 +265,29 @@ function scrollToPlans() {
   if (plansSection) {
     plansSection.scrollIntoView({ behavior: 'smooth' });
   }
+}
+
+// 7. SMART URGENCY BAR SCROLL BEHAVIOR (Hide on Scroll Down, Show on Scroll Up)
+function initSmartUrgencyBar() {
+  const urgencyBar = document.getElementById('urgencyBar');
+  if (!urgencyBar) return;
+
+  let lastScrollTop = 0;
+  const threshold = 8;
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (Math.abs(scrollTop - lastScrollTop) <= threshold) return;
+
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+      // Scroll Down -> Hide top bar
+      urgencyBar.classList.add('scroll-hidden');
+    } else {
+      // Scroll Up -> Show top bar
+      urgencyBar.classList.remove('scroll-hidden');
+    }
+
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  }, { passive: true });
 }
