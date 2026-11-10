@@ -1,293 +1,363 @@
 // ==========================================================================
-// NINJA KEYS — INTERACTIVE SCRIPT & UX OPTIMIZATIONS
+// NINJA KEYS — interações
 // ==========================================================================
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
-  initUrgencyTimer();
-  initSmartUrgencyBar();
-  initFAQAccordion();
-  initStickyMobileBar();
-  initTestimonialsCarousel();
+  initTimer();
+  initReveal();
+  initDecor();
+  initStickyBar();
+  initCarousel();
   initLightbox();
 });
 
-// 1. URGENCY COUNTDOWN TIMER
-function initUrgencyTimer() {
-  const timerElement = document.getElementById('timer');
-  if (!timerElement) return;
+// 0. Cronômetro da oferta (10 min). O fim fica salvo no navegador, então
+//    recarregar a página não reinicia a contagem. Ao zerar, o cronômetro some.
+function initTimer() {
+  const el = document.getElementById('timer');
+  const box = document.getElementById('timerBox');
+  if (!el) return;
 
-  let totalSeconds = 14 * 60 + 59; // 14:59 minutes countdown
+  const KEY = 'nk_offer_end_10m';
+  const DURATION = 10 * 60 * 1000;
+  let end = Number(localStorage.getItem(KEY));
+  if (!end) {
+    end = Date.now() + DURATION;
+    try { localStorage.setItem(KEY, String(end)); } catch (e) {}
+  }
 
-  const countdownInterval = setInterval(() => {
-    if (totalSeconds <= 0) {
-      clearInterval(countdownInterval);
-      timerElement.textContent = "00:00";
+  const tick = () => {
+    const left = Math.max(0, end - Date.now());
+    if (left === 0) {
+      if (box) box.hidden = true;
+      clearInterval(id);
       return;
     }
-
-    totalSeconds--;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    const formattedMins = String(minutes).padStart(2, '0');
-    const formattedSecs = String(seconds).padStart(2, '0');
-
-    timerElement.textContent = `${formattedMins}:${formattedSecs}`;
-  }, 1000);
+    const m = Math.floor(left / 60000);
+    const s = Math.floor((left % 60000) / 1000);
+    el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+  const id = setInterval(tick, 1000);
+  tick();
 }
 
-// 2. WHATSAPP TESTIMONIALS CAROUSEL
-function initTestimonialsCarousel() {
-  const carousel = document.getElementById('testimonialsCarousel');
-  if (!carousel) return;
+// 1. Revelação ao rolar: fade + slide, com atraso escalonado entre irmãos
+//    (cards da mesma grade entram um depois do outro) e contagem dos números.
+function initReveal() {
+  const items = document.querySelectorAll('.reveal');
 
-  const slides = carousel.querySelectorAll('.testimonial-slide');
-  const prevBtn = document.getElementById('carouselPrev');
-  const nextBtn = document.getElementById('carouselNext');
-  const dotsContainer = document.getElementById('carouselDots');
-  if (!slides.length) return;
-
-  let currentIndex = 0;
-  let autoPlayTimer = null;
-
-  // Create indicator dots dynamically
-  if (dotsContainer) {
-    dotsContainer.innerHTML = '';
-    slides.forEach((_, idx) => {
-      const dot = document.createElement('span');
-      dot.classList.add('dot-item');
-      if (idx === 0) dot.classList.add('active');
-      dot.addEventListener('click', () => {
-        goToSlide(idx);
-        resetAutoPlay();
-      });
-      dotsContainer.appendChild(dot);
-    });
-  }
-
-  function updateSlides() {
-    slides.forEach((slide, idx) => {
-      if (idx === currentIndex) {
-        slide.classList.add('active');
-      } else {
-        slide.classList.remove('active');
-      }
-    });
-
-    if (dotsContainer) {
-      const dots = dotsContainer.querySelectorAll('.dot-item');
-      dots.forEach((dot, idx) => {
-        if (idx === currentIndex) {
-          dot.classList.add('active');
-        } else {
-          dot.classList.remove('active');
-        }
-      });
-    }
-  }
-
-  function nextSlide() {
-    currentIndex = (currentIndex + 1) % slides.length;
-    updateSlides();
-  }
-
-  function prevSlide() {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    updateSlides();
-  }
-
-  function goToSlide(index) {
-    currentIndex = index;
-    updateSlides();
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      resetAutoPlay();
-    });
-  }
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      resetAutoPlay();
-    });
-  }
-
-  // Auto Play every 5 seconds
-  function startAutoPlay() {
-    autoPlayTimer = setInterval(nextSlide, 5000);
-  }
-
-  function resetAutoPlay() {
-    clearInterval(autoPlayTimer);
-    startAutoPlay();
-  }
-
-  const wrapper = document.querySelector('.testimonials-carousel-wrapper');
-  if (wrapper) {
-    wrapper.addEventListener('mouseenter', () => clearInterval(autoPlayTimer));
-    wrapper.addEventListener('mouseleave', () => startAutoPlay());
-  }
-
-  // Touch Swipe Support
-  let startX = 0;
-  let endX = 0;
-
-  carousel.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  carousel.addEventListener('touchend', (e) => {
-    endX = e.changedTouches[0].clientX;
-    const diff = startX - endX;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
-      resetAutoPlay();
-    }
-  }, { passive: true });
-
-  startAutoPlay();
-}
-
-// 3. LIGHTBOX FUNCTIONALITY FOR WHATSAPP TESTIMONIAL IMAGES
-function initLightbox() {
-  const modal = document.getElementById('lightboxModal');
-  const modalImg = document.getElementById('lightboxImg');
-  const closeBtn = document.getElementById('lightboxClose');
-  const clickableContainers = document.querySelectorAll('.whatsapp-img-container');
-
-  if (!modal || !modalImg) return;
-
-  clickableContainers.forEach(container => {
-    container.addEventListener('click', () => {
-      const img = container.querySelector('img');
-      if (img) {
-        modalImg.src = img.src;
-        modalImg.alt = img.alt;
-        modal.classList.add('active');
-      }
-    });
+  // Escalonamento: cada .reveal recebe um atraso pela posição entre os irmãos
+  items.forEach(el => {
+    const siblings = Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal'));
+    const i = siblings.indexOf(el);
+    if (i > 0) el.style.setProperty('--d', `${Math.min(i, 5) * 80}ms`);
   });
 
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-  }
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.remove('active');
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      modal.classList.remove('active');
-    }
-  });
-}
-
-// 4. FAQ ACCORDION
-function initFAQAccordion() {
-  const faqItems = document.querySelectorAll('.faq-item');
-
-  faqItems.forEach(item => {
-    const questionBtn = item.querySelector('.faq-question');
-    if (!questionBtn) return;
-
-    questionBtn.addEventListener('click', () => {
-      const isOpen = item.classList.contains('active');
-
-      // Close all other items
-      faqItems.forEach(otherItem => {
-        otherItem.classList.remove('active');
-      });
-
-      // Toggle current item
-      if (!isOpen) {
-        item.classList.add('active');
-      }
-    });
-  });
-}
-
-// 5. STICKY MOBILE BAR INTERSECTION OBSERVER
-function initStickyMobileBar() {
-  const stickyBar = document.getElementById('stickyMobileBar');
-  const heroSection = document.getElementById('hero');
-  const finalCtaSection = document.getElementById('finalCta');
-
-  if (!stickyBar || !heroSection) return;
-
-  // We show sticky bar when user scrolls past hero and is NOT in final CTA
-  let heroExited = false;
-  let insideFinalCta = false;
-
-  const updateStickyVisibility = () => {
-    if (heroExited && !insideFinalCta) {
-      stickyBar.classList.add('visible');
-    } else {
-      stickyBar.classList.remove('visible');
-    }
+  const onIn = (el) => {
+    el.classList.add('is-in');
+    el.querySelectorAll('[data-count]').forEach(countUp);
   };
 
-  const heroObserver = new IntersectionObserver((entries) => {
+  if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+    items.forEach(onIn);
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      heroExited = !entry.isIntersecting;
-      updateStickyVisibility();
+      if (entry.isIntersecting) {
+        onIn(entry.target);
+        io.unobserve(entry.target);
+      }
     });
-  }, { threshold: 0.1 });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+  items.forEach(el => io.observe(el));
 
-  heroObserver.observe(heroSection);
-
-  if (finalCtaSection) {
-    const finalCtaObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        insideFinalCta = entry.isIntersecting;
-        updateStickyVisibility();
-      });
-    }, { threshold: 0.1 });
-
-    finalCtaObserver.observe(finalCtaSection);
-  }
+  initTilt();
 }
 
-// 6. SMOOTH SCROLL TO PLANS
-function scrollToPlans() {
-  const plansSection = document.getElementById('planos');
-  if (plansSection) {
-    plansSection.scrollIntoView({ behavior: 'smooth' });
+// Peças 3D de fundo: aparecem ao entrar na tela e fazem parallax suave ao rolar.
+// O cálculo só roda enquanto a seção está visível e uma vez por frame.
+function initDecor() {
+  const decors = Array.from(document.querySelectorAll('.decor'));
+  if (!decors.length) return;
+
+  if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+    decors.forEach(d => d.classList.add('is-in'));
+    return;
   }
+
+  const visible = new Set();
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+    const vh = window.innerHeight;
+    const strength = window.innerWidth < 768 ? 40 : 90; // px de deslocamento
+    visible.forEach(d => {
+      const r = d.parentElement.getBoundingClientRect();
+      // -1 quando a seção está entrando por baixo, +1 quando sai por cima
+      const p = Math.max(-1, Math.min(1, (vh / 2 - (r.top + r.height / 2)) / vh));
+      d.style.setProperty('--py', `${(-p * strength).toFixed(1)}px`);
+      d.style.setProperty('--pr', `${(p * 6).toFixed(2)}deg`);
+    });
+  };
+  const onScroll = () => {
+    if (!ticking && visible.size) { ticking = true; requestAnimationFrame(update); }
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const d = entry.target.querySelector('.decor');
+      if (!d) return;
+      if (entry.isIntersecting) { visible.add(d); d.classList.add('is-in'); }
+      else visible.delete(d);
+    });
+    onScroll();
+  }, { rootMargin: '10% 0px 10% 0px' });
+
+  decors.forEach(d => io.observe(d.parentElement));
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
 }
 
-// 7. SMART URGENCY BAR SCROLL BEHAVIOR (Hide on Scroll Down, Show on Scroll Up)
-function initSmartUrgencyBar() {
-  const urgencyBar = document.getElementById('urgencyBar');
-  if (!urgencyBar) return;
+// Conta de 0 até o valor (em reais), com desaceleração no final
+function countUp(el) {
+  const target = parseFloat(el.dataset.count);
+  if (!target || el.dataset.counted) return;
+  el.dataset.counted = '1';
+  const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  const duration = 1100;
+  const start = performance.now() + 250;
+  const frame = (now) => {
+    const t = Math.min(1, Math.max(0, (now - start) / duration));
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = fmt.format(target * eased);
+    if (t < 1) requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+}
 
-  let lastScrollTop = 0;
-  const threshold = 8;
+// Inclinação suave do cartão de licença seguindo o mouse (só desktop com mouse)
+function initTilt() {
+  const area = document.querySelector('.hero-visual');
+  const card = document.querySelector('.license');
+  if (!area || !card || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  let raf = 0;
+  area.addEventListener('pointermove', (e) => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const r = area.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.setProperty('--ry', `${(x * 10).toFixed(2)}deg`);
+      card.style.setProperty('--rx', `${(-y * 8).toFixed(2)}deg`);
+      card.style.setProperty('--shine', `${(x * 40).toFixed(0)}px`);
+    });
+  });
+  area.addEventListener('pointerleave', () => {
+    cancelAnimationFrame(raf);
+    card.style.setProperty('--ry', '0deg');
+    card.style.setProperty('--rx', '0deg');
+    card.style.setProperty('--shine', '0px');
+  });
+}
 
-    if (Math.abs(scrollTop - lastScrollTop) <= threshold) return;
+// 2. Barra fixa mobile: aparece depois do hero, some nos planos e no CTA final
+function initStickyBar() {
+  const bar = document.getElementById('stickyBar');
+  const hero = document.getElementById('hero');
+  if (!bar || !hero || !('IntersectionObserver' in window)) return;
 
-    if (scrollTop > lastScrollTop && scrollTop > 50) {
-      // Scroll Down -> Hide top bar
-      urgencyBar.classList.add('scroll-hidden');
-    } else {
-      // Scroll Up -> Show top bar
-      urgencyBar.classList.remove('scroll-hidden');
+  const link = bar.querySelector('a');
+  const hideZones = ['planos', 'finalCta'].map(id => document.getElementById(id)).filter(Boolean);
+  let pastHero = false;
+  const inZone = new Set();
+
+  const update = () => {
+    const show = pastHero && inZone.size === 0;
+    bar.classList.toggle('is-visible', show);
+    bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+    if (link) link.tabIndex = show ? 0 : -1;
+  };
+
+  new IntersectionObserver(([entry]) => {
+    pastHero = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+    update();
+  }).observe(hero);
+
+  const zoneObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) inZone.add(entry.target);
+      else inZone.delete(entry.target);
+    });
+    update();
+  }, { threshold: 0.05 });
+  hideZones.forEach(z => zoneObserver.observe(z));
+}
+
+// 3. Carrossel 3D de depoimentos (coverflow)
+//    Cada slide recebe --off (posição relativa ao centro, pode ser fracionária
+//    durante o arraste) e --abs; o CSS transforma isso em profundidade e rotação.
+function initCarousel() {
+  const root = document.getElementById('carousel');
+  const stage = document.getElementById('carouselTrack');
+  if (!root || !stage) return;
+  const slides = Array.from(stage.querySelectorAll('.slide'));
+  const n = slides.length;
+  if (!n) return;
+
+  const dots = document.getElementById('carouselDots');
+  const prev = document.getElementById('carouselPrev');
+  const next = document.getElementById('carouselNext');
+
+  let pos = 0;        // posição atual (inteira quando parado)
+  let timer = null;
+
+  slides.forEach((s, i) => {
+    s.setAttribute('role', 'group');
+    s.setAttribute('aria-roledescription', 'slide');
+    s.setAttribute('aria-label', `${i + 1} de ${n}`);
+    s.addEventListener('click', () => {
+      if (moved) return;
+      const i0 = mod(Math.round(pos), n);
+      if (i === i0) openLightbox(s);
+      else go(pos + wrap(i - pos));
+      restart();
+    });
+    if (dots) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-label', `Depoimento ${i + 1}`);
+      b.addEventListener('click', () => { go(pos + wrap(i - pos)); restart(); });
+      dots.appendChild(b);
     }
+  });
 
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-  }, { passive: true });
+  function mod(a, m) { return ((a % m) + m) % m; }
+  function wrap(d) { // menor distância circular
+    d = mod(d + n / 2, n) - n / 2;
+    return d;
+  }
+
+  function layout() {
+    const active = mod(Math.round(pos), n);
+    slides.forEach((s, i) => {
+      const off = n > 2 ? wrap(i - pos) : i - pos;
+      const abs = Math.abs(off);
+      s.style.setProperty('--off', off.toFixed(3));
+      s.style.setProperty('--abs', abs.toFixed(3));
+      s.style.zIndex = String(100 - Math.round(abs * 10));
+      s.style.visibility = abs > 2.6 ? 'hidden' : 'visible';
+      const isActive = i === active;
+      s.classList.toggle('is-active', isActive);
+      s.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    });
+    if (dots) dots.querySelectorAll('button').forEach((b, i) =>
+      b.setAttribute('aria-selected', i === active ? 'true' : 'false'));
+  }
+
+  function go(p) { pos = Math.round(p); layout(); }
+
+  // Autoplay (pausa com mouse em cima, foco, arraste ou movimento reduzido)
+  function start() {
+    if (prefersReducedMotion || n < 2) return;
+    clearInterval(timer);
+    timer = setInterval(() => go(pos + 1), 5000);
+  }
+  function stop() { clearInterval(timer); }
+  function restart() { stop(); start(); }
+
+  prev && prev.addEventListener('click', () => { go(pos - 1); restart(); });
+  next && next.addEventListener('click', () => { go(pos + 1); restart(); });
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin', stop);
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { go(pos - 1); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { go(pos + 1); e.preventDefault(); }
+  });
+
+  // Arraste: o carrossel acompanha o dedo/mouse e encaixa no slide mais próximo
+  let startX = 0, startPos = 0, dragging = false, moved = false;
+  const gap = () => parseFloat(getComputedStyle(root).getPropertyValue('--gap')) || 200;
+
+  stage.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    dragging = true; moved = false;
+    startX = e.clientX; startPos = pos;
+    stop();
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 6) { moved = true; stage.classList.add('is-dragging'); }
+    if (moved) { pos = startPos - dx / gap(); layout(); }
+  });
+  const end = () => {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove('is-dragging');
+    if (moved) {
+      // um arraste curto e rápido já troca de slide
+      const delta = pos - startPos;
+      go(Math.abs(delta) > 0.15 && Math.abs(delta) < 0.5 ? startPos + Math.sign(delta) : pos);
+      setTimeout(() => { moved = false; }, 0);
+    }
+    start();
+  };
+  window.addEventListener('pointerup', end);
+  window.addEventListener('pointercancel', end);
+
+  // Só roda o autoplay quando a seção está na tela
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => entry.isIntersecting ? start() : stop(), { threshold: 0.3 }).observe(root);
+  } else {
+    start();
+  }
+
+  layout();
+  requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('is-ready')));
+}
+
+// Abre o print do slide no lightbox (definido em initLightbox)
+let openLightbox = () => {};
+
+// 4. Lightbox para ampliar os prints
+function initLightbox() {
+  const box = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  const close = document.getElementById('lightboxClose');
+  if (!box || !img) return;
+
+  let lastFocus = null;
+  const open = (src, alt) => {
+    lastFocus = document.activeElement;
+    img.src = src;
+    img.alt = alt;
+    box.hidden = false;
+    close && close.focus();
+  };
+  const shut = () => {
+    box.hidden = true;
+    lastFocus && lastFocus.focus();
+  };
+
+  // O carrossel chama isto ao clicar no slide central
+  openLightbox = (slide) => {
+    const el = slide.querySelector('img');
+    if (el) open(el.currentSrc || el.src, el.alt);
+  };
+  close && close.addEventListener('click', shut);
+  box.addEventListener('click', e => { if (e.target === box) shut(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) shut(); });
+}
+
+// Compatibilidade: chamadas antigas a scrollToPlans()
+function scrollToPlans() {
+  const el = document.getElementById('planos');
+  if (el) el.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
 }
