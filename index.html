@@ -634,14 +634,41 @@
     </div>
   </footer>
 
-  <!-- BARRA FIXA MOBILE -->
-  <div class="sticky-bar" id="stickyBar" aria-hidden="true">
-    <div class="sticky-info">
-      <span class="sticky-title">Ninja Key 18 meses</span>
-      <span class="sticky-price">R$ 119,90 <small>pagamento único</small></span>
+  <!-- BALÃO DE COMPRA FLUTUANTE
+       Aberto: card (desktop) / barra inferior (celular) com cronômetro, preço e botão de compra.
+       Fechado: vira um balão redondo no canto, que reabre sozinho depois de um tempo.
+       Some no topo (hero), na seção de planos e no CTA final. -->
+  <aside class="buy" id="buy" data-state="hidden" aria-label="Oferta Ninja Key 18 meses">
+    <div class="buy-card" id="buyCard">
+      <button class="buy-close" id="buyClose" type="button" aria-label="Minimizar oferta">
+        <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+      <p class="buy-timer" data-timer-box>
+        <span class="status-dot" aria-hidden="true"></span>
+        Oferta termina em <strong data-timer class="tab">10:00</strong>
+      </p>
+      <div class="buy-row">
+        <div class="buy-info">
+          <span class="buy-title">Google AI Pro · 18 meses</span>
+          <span class="buy-price">R$ 119,90 <s>R$ 1.745,82</s></span>
+        </div>
+        <a href="https://pay.cakto.com.br/9ix6yvm_1025492" target="_blank" rel="noopener noreferrer" class="btn btn-primary buy-cta">
+          Comprar agora
+          <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+      </div>
+      <p class="buy-foot">
+        <svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>
+        Pix ou cartão · Chave no e-mail em até 5 min · Garantia de 7 dias
+      </p>
     </div>
-    <a href="#planos" class="btn btn-primary btn-sm" tabindex="-1">Garantir</a>
-  </div>
+
+    <button class="buy-bubble" id="buyBubble" type="button" aria-expanded="false" aria-controls="buyCard"
+            aria-label="Abrir oferta: Google AI Pro 18 meses por R$ 119,90">
+      <svg class="i" aria-hidden="true"><use href="#i-key"/></svg>
+      <span class="buy-badge" aria-hidden="true">-93%</span>
+    </button>
+  </aside>
 
   <!-- LIGHTBOX DOS DEPOIMENTOS -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Depoimento ampliado" hidden>

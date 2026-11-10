@@ -16,9 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // 0. Cronômetro da oferta (10 min). O fim fica salvo no navegador, então
 //    recarregar a página não reinicia a contagem. Ao zerar, o cronômetro some.
 function initTimer() {
-  const el = document.getElementById('timer');
-  const box = document.getElementById('timerBox');
-  if (!el) return;
+  // Atualiza o cronômetro da barra do topo e o do balão de compra
+  const els = document.querySelectorAll('#timer, [data-timer]');
+  const boxes = document.querySelectorAll('#timerBox, [data-timer-box]');
+  if (!els.length) return;
 
   const KEY = 'nk_offer_end_10m';
   const DURATION = 10 * 60 * 1000;
@@ -31,13 +32,14 @@ function initTimer() {
   const tick = () => {
     const left = Math.max(0, end - Date.now());
     if (left === 0) {
-      if (box) box.hidden = true;
+      boxes.forEach(b => { b.hidden = true; });
       clearInterval(id);
       return;
     }
     const m = Math.floor(left / 60000);
     const s = Math.floor((left % 60000) / 1000);
-    el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const txt = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    els.forEach(el => { el.textContent = txt; });
   };
   const id = setInterval(tick, 1000);
   tick();
@@ -165,23 +167,83 @@ function initTilt() {
   });
 }
 
-// 2. Barra fixa mobile: aparece depois do hero, some nos planos e no CTA final
+// 2. Balão de compra flutuante
+//    - aparece aberto ~1,2s depois que a pessoa passa do hero
+//    - fechar (X) vira um balão redondo no canto; tocar no balão reabre
+//    - fechado, ele reabre sozinho depois de 40s (com um leve "chacoalhar")
+//    - some no hero, na seção de planos e no CTA final (onde já há botões de compra)
 function initStickyBar() {
-  const bar = document.getElementById('stickyBar');
+  const buy = document.getElementById('buy');
   const hero = document.getElementById('hero');
-  if (!bar || !hero || !('IntersectionObserver' in window)) return;
+  if (!buy || !hero || !('IntersectionObserver' in window)) return;
 
-  const link = bar.querySelector('a');
+  const card = document.getElementById('buyCard');
+  const bubble = document.getElementById('buyBubble');
+  const closeBtn = document.getElementById('buyClose');
+  const REOPEN_MS = 40000;
+
   const hideZones = ['planos', 'finalCta'].map(id => document.getElementById(id)).filter(Boolean);
   let pastHero = false;
+  let mode = 'open';          // escolha da pessoa: open | closed
+  let firstShown = false;
+  let reopenTimer = null;
+  let showTimer = null;
   const inZone = new Set();
 
-  const update = () => {
-    const show = pastHero && inZone.size === 0;
-    bar.classList.toggle('is-visible', show);
-    bar.setAttribute('aria-hidden', show ? 'false' : 'true');
-    if (link) link.tabIndex = show ? 0 : -1;
+  const setFocusable = (root, on) => {
+    root.querySelectorAll('a, button').forEach(el => { el.tabIndex = on ? 0 : -1; });
   };
+
+  const render = () => {
+    const eligible = pastHero && inZone.size === 0;
+    const state = eligible && firstShown ? mode : 'hidden';
+    buy.dataset.state = state;
+    setFocusable(card, state === 'open');
+    card.setAttribute('aria-hidden', state === 'open' ? 'false' : 'true');
+    bubble.tabIndex = state === 'closed' ? 0 : -1;
+    bubble.setAttribute('aria-expanded', state === 'open' ? 'true' : 'false');
+  };
+
+  const update = () => {
+    const eligible = pastHero && inZone.size === 0;
+    if (eligible && !firstShown && !showTimer) {
+      showTimer = setTimeout(() => {
+        firstShown = true;
+        nudge();
+        render();
+      }, 1200);
+    }
+    render();
+  };
+
+  const nudge = () => {
+    if (prefersReducedMotion) return;
+    card.classList.remove('is-nudge');
+    void card.offsetWidth; // reinicia a animação
+    card.classList.add('is-nudge');
+  };
+
+  const open = (auto) => {
+    clearTimeout(reopenTimer);
+    mode = 'open';
+    render();
+    if (auto) nudge();
+  };
+  const close = (viaKeyboard) => {
+    mode = 'closed';
+    render();
+    if (viaKeyboard) bubble.focus({ preventScroll: true });
+    clearTimeout(reopenTimer);
+    reopenTimer = setTimeout(() => {
+      if (mode === 'closed') open(true);
+    }, REOPEN_MS);
+  };
+
+  closeBtn && closeBtn.addEventListener('click', (e) => close(e.detail === 0));
+  bubble && bubble.addEventListener('click', () => open(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && buy.dataset.state === 'open' && buy.contains(document.activeElement)) close(true);
+  });
 
   new IntersectionObserver(([entry]) => {
     pastHero = !entry.isIntersecting && entry.boundingClientRect.top < 0;
